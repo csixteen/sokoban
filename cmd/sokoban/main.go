@@ -71,6 +71,12 @@ func detectKeyPress(w *pixelgl.Window, board *t.Board) {
 	if w.JustPressed(pixelgl.KeyUp) {
 		board.MoveRight()
 	}
+	if w.JustPressed(pixelgl.KeyQ) {
+		w.SetClosed(true)
+	}
+	if w.JustPressed(pixelgl.KeyR) {
+		board.Reset()
+	}
 }
 
 func drawBoard(

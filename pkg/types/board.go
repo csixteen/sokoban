@@ -16,6 +16,7 @@ const (
 )
 
 type Board struct {
+	data          []string
 	matrix        [][]*u.Stack
 	width, height int
 	pRow, pCol    int // Player coordinates on the board
@@ -66,6 +67,7 @@ func NewBoard(data []string) *Board {
 	}
 
 	return &Board{
+		data:   data,
 		matrix: m,
 		width:  cols,
 		height: rows,
@@ -87,6 +89,17 @@ func (b *Board) IsVictory() bool {
 
 // Bounds returns a pair (width, height) representing the
 // bounds of the board.
+
+// Reset resets the board to its initial state.
+// TODO: figure out a better way of doing this.
+func (b *Board) Reset() {
+	n := NewBoard(b.data)
+	b.matrix = n.matrix
+	b.pRow = n.pRow
+	b.pCol = n.pCol
+	b.goals = n.goals
+}
+
 func (b *Board) Bounds() (int, int) {
 	return b.width, b.height
 }
