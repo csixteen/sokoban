@@ -46,3 +46,7 @@ ok  	command-line-arguments	(cached)
 
 # References
 - SpriteSheets: https://kenney.nl/assets/sokoban
+
+# License
+
+[MIT](https://github.com/csixteen/sokoban/blob/master/LICENSE)
