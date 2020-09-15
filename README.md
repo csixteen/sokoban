@@ -2,6 +2,10 @@
 
 Implementation of the classic [Sokoban](https://en.wikipedia.org/wiki/Sokoban) in Go.
 
+<p>
+  <img src="https://raw.githubusercontent.com/csixteen/sokoban/master/screenshots/sokoban.png" />
+</p>
+
 # Building and Running
 
 ```
