@@ -42,6 +42,19 @@ These are the current board elements:
 
 The levels are defined in the `levels.dat` file. Each level is specified as 8 consecutive strings with 8 characters each. Different levels are separated by one or more empty strings. Right now each level must be a matrix 8x8, but this is a limitation that I'll hopefully fix soon.
 
+The matrices in `levels.dat` will be rendered 90 degrees rotated anti-clockwise. I still haven't fixed this, but I don't think it's that big of a deal. Here is the matrix that corresponds to the level on the screenshot:
+
+```
+wwwwwwww
+wffwfffw
+wjbggbfw
+wfbgbffw
+wffggbfw
+wffffffw
+wfwwfwww
+wwwwwwww
+```
+
 # Testing
 
 ```
