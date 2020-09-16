@@ -94,6 +94,7 @@ There is still lots of room for improving things. Pull-requests with bug fixes o
 
 - Pixel 2D Game library: https://github.com/faiface/pixel
 - SpriteSheets: https://kenney.nl/assets/sokoban
+- Pkger: https://github.com/markbates/pkger. I'm using this tool to embedded the static assets into the binary. Thanks to [skuzzymiglet](https://www.reddit.com/r/golang/comments/itbr8t/im_still_fairly_new_to_go_so_i_decided_to/g5ghbrn/) for the suggestion.
 
 # License
 
