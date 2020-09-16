@@ -5,4 +5,5 @@ test:
 
 .PHONY: bin
 bin:
+	pkger -o cmd/sokoban/
 	go build -o soko cmd/sokoban/*.go

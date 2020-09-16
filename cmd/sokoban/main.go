@@ -1,3 +1,25 @@
+// MIT License
+//
+// Copyright (c) 2020 Pedro Rodrigues
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 package main
 
 import (
@@ -20,8 +42,6 @@ const (
 	SpritesPath = "/assets/sprites/sokoban_tilesheet.png"
 	LevelsPath  = "/assets/levels/levels.dat"
 	TileSize    = 64
-	PuzzleSize  = 8
-	Dim         = TileSize * PuzzleSize
 )
 
 var (
@@ -30,6 +50,14 @@ var (
 	level        = 0
 	showingText  = false
 	textDuration = 2
+)
+
+var (
+	allLevels    [][]string
+	currentLevel = 0
+	board        *t.Board
+	boardWidth   int
+	boardHeight  int
 )
 
 var CharToTile = map[rune]int{
@@ -89,8 +117,8 @@ func drawBoard(
 ) {
 	batch.Clear()
 
-	for row := 0; row < PuzzleSize; row += 1 {
-		for col := 0; col < PuzzleSize; col += 1 {
+	for row := 0; row < boardHeight; row += 1 {
+		for col := 0; col < boardWidth; col += 1 {
 			val, _ := board.Get(row, col)
 			if tile, ok := CharToTile[val]; ok {
 				elem := pixel.NewSprite(sprites, frames[tile])
@@ -107,7 +135,13 @@ func drawBoard(
 func displayText(win *pixelgl.Window, duration int, p string, args ...interface{}) {
 	dt := float64(len(p))
 	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
-	basicTxt := text.New(pixel.V(Dim/2-2*dt, Dim/2), basicAtlas)
+	basicTxt := text.New(
+		pixel.V(
+			float64((boardWidth*TileSize)/2)-2*dt,
+			float64((boardHeight*TileSize)/2),
+		),
+		basicAtlas,
+	)
 	fmt.Fprintf(basicTxt, p, args...)
 
 	win.Clear(colornames.Black)
@@ -119,15 +153,8 @@ func displayText(win *pixelgl.Window, duration int, p string, args ...interface{
 }
 
 func run() {
-	cfg := pixelgl.WindowConfig{
-		Title:  "Sokoban",
-		Bounds: pixel.R(0, 0, Dim, Dim),
-		VSync:  true,
-	}
-	win, err := pixelgl.NewWindow(cfg)
-	if err != nil {
-		panic(err)
-	}
+	//--------------------------------------------
+	//    Initialize sprites and tile frames
 
 	sprites, err := loadPicture(SpritesPath)
 	if err != nil {
@@ -141,29 +168,57 @@ func run() {
 		}
 	}
 
-	levels := LoadLevels(LevelsPath)
-	board := t.NewBoard(levels[level])
 	batch := pixel.NewBatch(&pixel.TrianglesData{}, sprites)
 
-	displayText(win, 2, "Level %d", level+1)
+	//----------------------------------------------
+	//     Load levels and create a new board
 
+	allLevels = loadLevels(LevelsPath)
+	board = t.NewBoard(allLevels[currentLevel])
+	boardWidth, boardHeight = board.Bounds()
+
+	cfg := pixelgl.WindowConfig{
+		Title: "Sokoban",
+		Bounds: pixel.R(
+			0,
+			0,
+			float64(boardHeight*TileSize),
+			float64(boardWidth*TileSize),
+		),
+		VSync: true,
+	}
+	win, err := pixelgl.NewWindow(cfg)
+	if err != nil {
+		panic(err)
+	}
+
+	displayText(win, 2, "Level %d", currentLevel+1)
+
+	// main loop
 	for !win.Closed() {
+		if board.IsVictory() {
+			currentLevel++
+			if currentLevel == len(allLevels) {
+				win.SetClosed(true)
+			} else {
+				displayText(win, 2, "Level %d", currentLevel+1)
+				board = t.NewBoard(allLevels[currentLevel])
+				boardWidth, boardHeight = board.Bounds()
+				win.SetBounds(pixel.R(
+					0,
+					0,
+					float64(boardHeight*TileSize),
+					float64(boardWidth*TileSize),
+				))
+			}
+		}
+
 		if !showingText {
 			detectKeyPress(win, board)
 
 			win.Clear(colornames.Darkslategray)
 
 			drawBoard(win, batch, sprites, tileFrames, board)
-
-			if board.IsVictory() {
-				level++
-				if level == len(levels) {
-					win.SetClosed(true)
-				} else {
-					displayText(win, 2, "Level %d", level+1)
-					board = t.NewBoard(levels[level])
-				}
-			}
 
 			win.Update()
 		}

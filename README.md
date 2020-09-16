@@ -6,11 +6,16 @@ Implementation of the classic [Sokoban](https://en.wikipedia.org/wiki/Sokoban) i
   <img src="https://raw.githubusercontent.com/csixteen/sokoban/master/screenshots/sokoban.png" />
 </p>
 
-# Dependencies
+# Installing
 
-The project uses Go modules, so you'll need a version of Go more recent than [1.11](https://blog.golang.org/using-go-modules).
+```
+$ go get github.com/csixteen/sokoban/cmd/sokoban
+```
 
 # Building and Running
+
+The project uses Go modules, so you'll need a version of Go more recent than [1.11](https://blog.golang.org/using-go-modules).
+You will also need to have [pkger](https://github.com/markbates/pkger) installed.
 
 ```
 $ make bin
@@ -24,23 +29,9 @@ $ ./soko
 - `q` - quits the game
 - `r` - resets the level
 
-# Board elements
-
-These are the current board elements:
-
-- `w` - wall (unmovable)
-- `b` - block (movable)
-- `f` - floor
-- `g` - goal (where you need to put the block onto)
-- `o` - block on a goal (becomes unmovable)
-- `h` - player facing left
-- `j` - player facing down
-- `k` - player facing up
-- `l` - player facing right
-
 # Adding a new level
 
-The levels are defined in the `levels.dat` file. Each level is specified as 8 consecutive strings with 8 characters each. Different levels are separated by one or more empty strings. Right now each level must be a matrix 8x8, but this is a limitation that I'll hopefully fix soon.
+The levels are defined in the `levels.dat` file. Each level is specified as a number of consecutive lines, all with the same length (essentially, a matrix).
 
 The matrices in `levels.dat` will be rendered 90 degrees rotated anti-clockwise. I still haven't fixed this, but I don't think it's that big of a deal. Here is the matrix that corresponds to the level on the screenshot:
 
@@ -54,6 +45,22 @@ wffffffw
 wfwwfwww
 wwwwwwww
 ```
+
+You'll have to run `make bin` after you make changes to **levels.dat**.
+
+## Board elements
+
+These are the current board elements:
+
+- `w` - wall (unmovable)
+- `b` - block (movable)
+- `f` - floor
+- `g` - goal (where you need to put the block onto)
+- `o` - block on a goal (becomes unmovable)
+- `h` - player facing left
+- `j` - player facing down
+- `k` - player facing up
+- `l` - player facing right
 
 # Testing
 
@@ -81,10 +88,11 @@ PASS
 ok  	command-line-arguments	(cached)
 ```
 
-# Limitations and caveats
+# To Do
 
-- Levels are limited to being defined as 8x8 matrices.
-- Hardcoded values (sprite sheets, sprites dimensions, etc).
+- Fix the orientation of the board. Right now, the level description in `levels.dat` results in a board that is rotated 90 degrees anti-clockwise when the window is rendered.
+- Add more levels.
+- Keep track of time that it takes to complete each level and display it.
 
 # Contributing
 
