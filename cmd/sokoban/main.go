@@ -47,7 +47,6 @@ const (
 var (
 	frames       = 0
 	second       = time.Tick(time.Second)
-	level        = 0
 	showingText  = false
 	textDuration = 2
 )
