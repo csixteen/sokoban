@@ -87,9 +87,6 @@ func (b *Board) IsVictory() bool {
 ///----------------------------------------------------------
 ///                 Board manipulation
 
-// Bounds returns a pair (width, height) representing the
-// bounds of the board.
-
 // Reset resets the board to its initial state.
 // TODO: figure out a better way of doing this.
 func (b *Board) Reset() {
@@ -100,6 +97,8 @@ func (b *Board) Reset() {
 	b.goals = n.goals
 }
 
+// Bounds returns a pair (width, height) representing the
+// bounds of the board.
 func (b *Board) Bounds() (int, int) {
 	return b.width, b.height
 }

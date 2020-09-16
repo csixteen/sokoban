@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"image"
-	"os"
 	"time"
 
 	_ "image/png"
@@ -12,15 +11,17 @@ import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel/text"
+	"github.com/markbates/pkger"
 	"golang.org/x/image/colornames"
 	"golang.org/x/image/font/basicfont"
 )
 
 const (
-	SpritesPicture = "assets/sokoban_tilesheet.png"
-	TileSize       = 64
-	PuzzleSize     = 8
-	Dim            = TileSize * PuzzleSize
+	SpritesPath = "/assets/sprites/sokoban_tilesheet.png"
+	LevelsPath  = "/assets/levels/levels.dat"
+	TileSize    = 64
+	PuzzleSize  = 8
+	Dim         = TileSize * PuzzleSize
 )
 
 var (
@@ -44,7 +45,7 @@ var CharToTile = map[rune]int{
 }
 
 func loadPicture(path string) (pixel.Picture, error) {
-	file, err := os.Open(path)
+	file, err := pkger.Open(path)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +129,7 @@ func run() {
 		panic(err)
 	}
 
-	sprites, err := loadPicture(SpritesPicture)
+	sprites, err := loadPicture(SpritesPath)
 	if err != nil {
 		panic(err)
 	}
@@ -140,7 +141,7 @@ func run() {
 		}
 	}
 
-	levels := LoadLevels("levels.dat")
+	levels := LoadLevels(LevelsPath)
 	board := t.NewBoard(levels[level])
 	batch := pixel.NewBatch(&pixel.TrianglesData{}, sprites)
 
@@ -185,5 +186,8 @@ func run() {
 }
 
 func main() {
+	pkger.Include(SpritesPath)
+	pkger.Include(LevelsPath)
+
 	pixelgl.Run(run)
 }

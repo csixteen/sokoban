@@ -2,12 +2,13 @@ package main
 
 import (
 	"bufio"
-	"os"
 	"strings"
+
+	"github.com/markbates/pkger"
 )
 
 func ReadLinesFromFile(path string) ([]string, error) {
-	file, err := os.Open(path)
+	file, err := pkger.Open(path)
 	if err != nil {
 		return []string{}, err
 	}
