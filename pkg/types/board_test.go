@@ -60,12 +60,12 @@ func TestNewBoard(t *testing.T) {
 	v, _ = board.Get(1, 1)
 	assert.Equal(t, 'o', v, "There should be an `o` in cell (1, 1)")
 
-	r, c := board.FindPlayer()
+	r, c := board.findPlayer()
 	assert.Equal(t, 2, r)
 	assert.Equal(t, 1, c)
 
-	board.SetPlayerChar('k')
-	r, c = board.FindPlayer()
+	board.setPlayerChar('k')
+	r, c = board.findPlayer()
 	v, _ = board.Get(r, c)
 	assert.Equal(t, 'k', v)
 	board.Remove(r, c)
@@ -91,12 +91,12 @@ func TestMovePlayer(t *testing.T) {
 	assert.True(t, isFloor(v))
 	v, _ = board.Get(3, 1)
 	assert.True(t, isPlayer(v))
-	r, c := board.FindPlayer()
+	r, c := board.findPlayer()
 	assert.Equal(t, 3, r)
 	assert.Equal(t, 1, c)
 
 	board.MoveRight()
-	r, c = board.FindPlayer()
+	r, c = board.findPlayer()
 	assert.Equal(t, 3, r)
 	assert.Equal(t, 2, c)
 	v, _ = board.Get(3, 2)
@@ -111,7 +111,7 @@ func TestMovePlayerTwoBlocks(t *testing.T) {
 	board := NewBoard(data)
 
 	board.MoveRight()
-	r, c := board.FindPlayer()
+	r, c := board.findPlayer()
 	assert.Equal(t, 0, r)
 	assert.Equal(t, 1, c)
 

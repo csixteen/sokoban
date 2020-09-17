@@ -154,7 +154,7 @@ func (b *Board) Remove(row, col int) (rune, error) {
 // is movable, it will check whether the adjacent cell is walkable (either
 // floor or goal) or contains a movable object. If it contains a movable
 // object, it will try to move it as well, in a recursive fashion.
-func (b *Board) MoveFrom(sRow, sCol int, d Direction) (int, int, error) {
+func (b *Board) moveFrom(sRow, sCol int, d Direction) (int, int, error) {
 	elem, _ := b.Get(sRow, sCol)
 	if !isMovable(elem) {
 		return -1, -1, errors.New("Cannot move unmovable element")
@@ -185,12 +185,12 @@ func (b *Board) MoveFrom(sRow, sCol int, d Direction) (int, int, error) {
 		return nextRow, nextCol, nil
 	}
 
-	_, _, err := b.MoveFrom(nextRow, nextCol, d)
+	_, _, err := b.moveFrom(nextRow, nextCol, d)
 	if err != nil {
 		return -1, -1, err
 	}
 
-	return b.MoveFrom(sRow, sCol, d)
+	return b.moveFrom(sRow, sCol, d)
 }
 
 ///-------------------------------------------------------------
@@ -225,17 +225,17 @@ func isWalkable(c rune) bool {
 
 // FindPlayer returns a pair (row, col) representing the location
 // of the player on the board.
-func (b *Board) FindPlayer() (int, int) {
+func (b *Board) findPlayer() (int, int) {
 	return b.pRow, b.pCol
 }
 
-func (b *Board) SetPlayerPos(row, col int) {
+func (b *Board) setPlayerPos(row, col int) {
 	b.pRow = row
 	b.pCol = col
 }
 
-func (b *Board) SetPlayerChar(c rune) {
-	row, col := b.FindPlayer()
+func (b *Board) setPlayerChar(c rune) {
+	row, col := b.findPlayer()
 	b.matrix[row][col].Pop()
 	b.matrix[row][col].Push(c)
 }
@@ -243,19 +243,19 @@ func (b *Board) SetPlayerChar(c rune) {
 func (b *Board) movePlayer(d Direction) {
 	switch d {
 	case Up:
-		b.SetPlayerChar('k')
+		b.setPlayerChar('k')
 	case Down:
-		b.SetPlayerChar('j')
+		b.setPlayerChar('j')
 	case Left:
-		b.SetPlayerChar('h')
+		b.setPlayerChar('h')
 	case Right:
-		b.SetPlayerChar('l')
+		b.setPlayerChar('l')
 	}
 
-	r, c := b.FindPlayer()
-	row, col, err := b.MoveFrom(r, c, d)
+	r, c := b.findPlayer()
+	row, col, err := b.moveFrom(r, c, d)
 	if err == nil {
-		b.SetPlayerPos(row, col)
+		b.setPlayerPos(row, col)
 	}
 }
 
