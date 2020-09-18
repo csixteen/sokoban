@@ -132,12 +132,12 @@ func drawBoard(
 }
 
 func displayText(win *pixelgl.Window, duration int, p string, args ...interface{}) {
-	dt := float64(len(p))
+	dt := float64(len(p)) * 13 / 2 // 13 because Face7x13
 	basicAtlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
 	basicTxt := text.New(
 		pixel.V(
-			float64((boardWidth*TileSize)/2)-2*dt,
-			float64((boardHeight*TileSize)/2),
+			float64((boardHeight*TileSize)/2)-dt,
+			float64((boardWidth*TileSize)/2),
 		),
 		basicAtlas,
 	)
