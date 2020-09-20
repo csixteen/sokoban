@@ -93,6 +93,8 @@ ok  	command-line-arguments	(cached)
 - Fix the orientation of the board. Right now, the level description in `levels.dat` results in a board that is rotated 90 degrees anti-clockwise when the window is rendered.
 - Add more levels.
 - Keep track of time that it takes to complete each level and display it.
+- Keep track of solved levels, so that the player doesn't have to start all over from Level 1 every single time.
+- Provide the ability to choose from previously solved levels.
 
 # Contributing
 
