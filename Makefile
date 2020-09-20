@@ -1,7 +1,7 @@
 .PHONY: test
 test:
 	go test -v pkg/utils/*.go
-	go test -v pkg/types/*.go
+	go test -v pkg/game/*.go
 
 .PHONY: bin
 bin:

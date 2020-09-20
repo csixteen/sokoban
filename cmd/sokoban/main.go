@@ -29,7 +29,7 @@ import (
 
 	_ "image/png"
 
-	t "github.com/csixteen/sokoban/pkg/types"
+	"github.com/csixteen/sokoban/pkg/game"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/faiface/pixel/text"
@@ -54,7 +54,7 @@ var (
 var (
 	allLevels    [][]string
 	currentLevel = 0
-	board        *t.Board
+	board        *game.Board
 	boardWidth   int
 	boardHeight  int
 )
@@ -86,7 +86,7 @@ func loadPicture(path string) (pixel.Picture, error) {
 	return pixel.PictureDataFromImage(img), nil
 }
 
-func detectKeyPress(w *pixelgl.Window, board *t.Board) {
+func detectKeyPress(w *pixelgl.Window, board *game.Board) {
 	if w.JustPressed(pixelgl.KeyLeft) {
 		board.MoveUp()
 	}
@@ -112,7 +112,7 @@ func drawBoard(
 	batch *pixel.Batch,
 	sprites pixel.Picture,
 	frames []pixel.Rect,
-	board *t.Board,
+	board *game.Board,
 ) {
 	batch.Clear()
 
@@ -173,7 +173,7 @@ func run() {
 	//     Load levels and create a new board
 
 	allLevels = loadLevels(LevelsPath)
-	board = t.NewBoard(allLevels[currentLevel])
+	board = game.NewBoard(allLevels[currentLevel])
 	boardWidth, boardHeight = board.Bounds()
 
 	cfg := pixelgl.WindowConfig{
@@ -201,7 +201,7 @@ func run() {
 				win.SetClosed(true)
 			} else {
 				displayText(win, 2, "Level %d", currentLevel+1)
-				board = t.NewBoard(allLevels[currentLevel])
+				board = game.NewBoard(allLevels[currentLevel])
 				boardWidth, boardHeight = board.Bounds()
 				win.SetBounds(pixel.R(
 					0,
